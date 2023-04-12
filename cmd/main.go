@@ -14,14 +14,14 @@ import (
 func main() {
 
 	// Cargo csv.
-	list, err := LoadTicketsFromFile("../../tickets.csv")
+	list, err := LoadTicketsFromFile("/Users/decardenas/Documents/go_web_Desafio/desafio-go-web/tickets.csv")
 	if err != nil {
 		panic("Couldn't load tickets")
 	}
-
+	//genera un nuevo router en gin
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) { c.String(200, "pong") })
-
+	//Configuracion del router, con un metodo inicializador
 	router := router.NewRouter(r, list)
 	router.MapRoutes()
 
@@ -30,7 +30,8 @@ func main() {
 	}
 
 }
-
+//Se lee el archivo tickets.csv y se introduce en un slice que
+//es del tipo de estructura de ticket, 
 func LoadTicketsFromFile(path string) ([]domain.Ticket, error) {
 
 	var ticketList []domain.Ticket
@@ -47,6 +48,7 @@ func LoadTicketsFromFile(path string) ([]domain.Ticket, error) {
 	}
 
 	for _, row := range data {
+		//Hay que parsear el precio, ya que es un string, se parcea a float64
 		price, err := strconv.ParseFloat(row[5], 64)
 		if err != nil {
 			return []domain.Ticket{}, err
